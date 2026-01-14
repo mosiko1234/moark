@@ -1,0 +1,12 @@
+{
+  "version": "1.0",
+  "mappings": {
+    "moshe-test": {
+      "internal_repo": "moshe-test-internal",
+      "internal_url": "https://kh-gitlab.kayhut.local/root/moshe-test-internal.git",
+      "description": "Test repository - mapped to internal instance"
+    }
+  }
+}
+
+

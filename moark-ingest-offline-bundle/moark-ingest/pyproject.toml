@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "moark-ingest"
+version = "0.1.0"
+description = "Moses in the Ark - Ingest tool for loading Git bundles in air-gapped networks"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "typer>=0.9.0",
+    "boto3>=1.28.0",
+]
+
+[project.scripts]
+moark-ingest = "moark_ingest.ingest:main"
+moark-ingest-ui = "moark_ingest.ingest_ui:main"
+moark-mapping = "moark_ingest.mapping_cli:main"
+
+[project.optional-dependencies]
+ui = [
+    "textual>=0.40.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/moark_ingest"]

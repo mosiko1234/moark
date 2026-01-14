@@ -1,0 +1,4 @@
+# file: /Users/mosheeliya/dev/airgap-git-relay/src/airgap_git_relay/gitlab_client.py
+# hypothesis_version: 6.148.7
+
+[8192, '/', 'PRIVATE-TOKEN', 'artifacts', 'desc', 'id', 'order_by', 'per_page', 'ref', 'sort', 'status', 'success', 'wb']

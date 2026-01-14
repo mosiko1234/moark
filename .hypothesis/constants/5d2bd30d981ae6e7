@@ -1,0 +1,4 @@
+# file: /Users/mosheeliya/dev/airgap-git-relay/src/airgap_git_relay/config_manager.py
+# hypothesis_version: 6.148.7
+
+['%Y%m%dT%H%M%SZ', '.yaml', '.yml', 'Default profile', 'active_profile', 'added_at', 'api_key', 'backups', 'created_at', 'credential', 'default', 'description', 'internal_name', 'json', 'mappings', 'name', 'notes', 'password', 'profile', 'profiles', 'profiles.json', 'secret', 'token', 'updated_at', 'utf-8', 'yaml']

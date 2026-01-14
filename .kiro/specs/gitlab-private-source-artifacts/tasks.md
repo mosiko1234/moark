@@ -1,0 +1,127 @@
+# Implementation Plan
+
+- [x] 1. Create GitLab API Client Module
+  - [x] 1.1 Create `gitlab_client.py` with GitLabConfig and ArtifactInfo dataclasses
+    - Define dataclasses for configuration and artifact metadata
+    - Include type hints for all fields
+    - _Requirements: 2.2, 5.2_
+  - [x] 1.2 Implement `build_clone_url` method for authenticated Git URLs
+    - Construct URL from base_url, repo_path, username, and token
+    - Handle URL parsing to extract host
+    - _Requirements: 1.2, 1.3_
+  - [x] 1.3 Write property test for URL construction
+    - **Property 1: URL Construction Correctness**
+    - **Validates: Requirements 1.2, 1.3**
+  - [x] 1.4 Implement `get_project_id` method
+    - URL-encode the repo path for API call
+    - Parse project ID from response
+    - _Requirements: 2.2_
+  - [x] 1.5 Implement `get_latest_successful_pipeline` method
+    - Query pipelines API with status=success filter
+    - Support optional ref parameter
+    - Return None if no pipeline found
+    - _Requirements: 2.3, 2.4_
+  - [x] 1.6 Write property test for ref parameter in API calls
+    - **Property 3: Ref Parameter in API Calls**
+    - **Validates: Requirements 2.4**
+  - [x] 1.7 Implement `list_pipeline_jobs_with_artifacts` method
+    - Query jobs API for pipeline
+    - Filter jobs that have artifacts
+    - _Requirements: 2.1_
+  - [x] 1.8 Implement `download_job_artifacts` method
+    - Download artifacts zip from job
+    - Return ArtifactInfo with metadata
+    - _Requirements: 2.1, 2.5_
+
+- [x] 2. Extend Pack Command with GitLab Private Source Support
+  - [x] 2.1 Add new CLI parameters to pack command
+    - Add `--source-gitlab-url`, `--repo-path`, `--source-username`, `--source-token`
+    - Add `--with-artifacts`, `--artifacts-ref`
+    - Configure envvar fallbacks for credentials
+    - _Requirements: 1.1, 1.3, 1.4, 2.1_
+  - [x] 2.2 Implement parameter validation logic
+    - Validate that `--source-gitlab-url` requires `--repo-path`
+    - Validate that `--with-artifacts` requires GitLab source parameters
+    - _Requirements: 1.5_
+  - [x] 2.3 Integrate GitLab client into pack workflow
+    - Create GitLabClient when private source is used
+    - Build clone URL using client
+    - _Requirements: 1.2, 1.3_
+  - [x] 2.4 Implement artifact download and bundling logic
+    - Create `artifacts/` directory in bundle
+    - Download artifacts for each job
+    - Organize by job name
+    - _Requirements: 2.1, 2.5_
+  - [x] 2.5 Write property test for artifact storage location
+    - **Property 4: Artifact Storage Location**
+    - **Validates: Requirements 2.5**
+  - [x] 2.6 Update manifest generation to include artifact metadata
+    - Add `with_artifacts` flag
+    - Add `artifacts` array with job metadata
+    - Add `source_gitlab_url` and `repo_path` fields
+    - _Requirements: 2.6, 5.1, 5.2_
+  - [x] 2.7 Write property test for manifest artifact metadata
+    - **Property 5: Manifest Artifact Metadata Completeness**
+    - **Validates: Requirements 2.6, 5.1, 5.2**
+
+- [x] 3. Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 4. Implement Manifest Serialization Tests
+  - [x] 4.1 Write property test for manifest JSON round-trip
+    - **Property 10: Manifest JSON Round-Trip**
+    - **Validates: Requirements 5.3, 5.4**
+
+- [x] 5. Extend Ingest Command with Artifact Extraction
+  - [x] 5.1 Add `--artifacts-output-dir` parameter to ingest command
+    - Optional parameter for artifact extraction destination
+    - _Requirements: 3.2_
+  - [x] 5.2 Implement artifact detection function
+    - Check for `artifacts/` directory in bundle
+    - Return boolean indicating presence
+    - _Requirements: 3.1_
+  - [x] 5.3 Write property test for artifact detection
+    - **Property 6: Artifact Detection**
+    - **Validates: Requirements 3.1**
+  - [x] 5.4 Implement artifact extraction function
+    - Copy all files from `artifacts/` to output directory
+    - Preserve directory structure
+    - Return file count and total size
+    - _Requirements: 3.2, 3.4, 3.5_
+  - [x] 5.5 Write property test for artifact extraction completeness
+    - **Property 7: Artifact Extraction Completeness**
+    - **Validates: Requirements 3.2**
+  - [x] 5.6 Write property test for artifact structure preservation
+    - **Property 8: Artifact Structure Preservation**
+    - **Validates: Requirements 3.4**
+  - [x] 5.7 Write property test for extraction statistics accuracy
+    - **Property 9: Extraction Statistics Accuracy**
+    - **Validates: Requirements 3.5**
+  - [x] 5.8 Integrate artifact extraction into ingest workflow
+    - Call extraction when output dir is provided
+    - Log info message when skipping
+    - _Requirements: 3.2, 3.3_
+
+- [x] 6. Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 7. Add Dependencies and Update Project Configuration
+  - [x] 7.1 Add `requests` dependency to pyproject.toml
+    - Required for GitLab API calls
+    - _Requirements: 2.2_
+  - [x] 7.2 Add `hypothesis` as dev dependency
+    - Required for property-based testing
+    - _Requirements: Testing Strategy_
+
+- [x] 8. Update Documentation
+  - [x] 8.1 Update README.md with private GitLab examples
+    - Add section for private GitLab configuration
+    - Document all new parameters
+    - _Requirements: 4.1, 4.2_
+  - [x] 8.2 Add complete workflow example to README.md
+    - Show pack command with all new options
+    - Show ingest command with artifact extraction
+    - _Requirements: 4.3_
+
+- [x] 9. Final Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.

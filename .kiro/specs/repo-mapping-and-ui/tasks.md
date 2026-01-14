@@ -1,0 +1,185 @@
+# Implementation Plan
+
+- [x] 1. Set up project structure and core configuration module
+  - [x] 1.1 Create configuration module structure
+    - Create `src/airgap_git_relay/config_manager.py` with Profile and MappingEntry dataclasses
+    - Implement ConfigManager class with profile and mapping management methods
+    - Add support for JSON and YAML configuration formats
+    - _Requirements: 1.1, 1.2, 1.4_
+  - [x] 1.2 Write property test for configuration format round-trip
+    - **Property 2: Configuration Format Round-Trip**
+    - **Validates: Requirements 1.4**
+  - [x] 1.3 Write property test for mapping resolution
+    - **Property 1: Mapping Resolution Correctness**
+    - **Validates: Requirements 1.5**
+  - [x] 1.4 Write unit tests for ConfigManager
+    - Test profile CRUD operations
+    - Test mapping file creation and loading
+    - Test error handling for invalid files
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
+
+- [x] 2. Implement Mapping CLI
+  - [x] 2.1 Create mapping CLI module
+    - Create `src/airgap_git_relay/mapping_cli.py` with Typer commands
+    - Implement `list`, `add`, `remove`, `validate` commands
+    - Add backup creation before modifications
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
+  - [x] 2.2 Write property test for add mapping persistence
+    - **Property 3: Add Mapping Persistence**
+    - **Validates: Requirements 2.2, 5.3**
+  - [x] 2.3 Write property test for remove mapping correctness
+    - **Property 4: Remove Mapping Correctness**
+    - **Validates: Requirements 2.3, 5.4**
+  - [x] 2.4 Write property test for backup creation
+    - **Property 5: Backup Creation on Modification**
+    - **Validates: Requirements 2.5**
+  - [x] 2.5 Register CLI entry point
+    - Add `airgap-mapping` entry point in pyproject.toml
+    - _Requirements: 2.1_
+
+- [x] 3. Implement History Manager
+  - [x] 3.1 Create history manager module
+    - Create `src/airgap_git_relay/history_manager.py` with HistoryEntry dataclass
+    - Implement HistoryManager class with add_entry, get_entries, get_entry methods
+    - _Requirements: 6.1, 6.2_
+  - [x] 3.2 Write property test for history recording completeness
+    - **Property 11: History Recording Completeness**
+    - **Validates: Requirements 6.1, 6.2**
+  - [x] 3.3 Write unit tests for HistoryManager
+    - Test entry creation and retrieval
+    - Test history file persistence
+    - _Requirements: 6.1, 6.2, 6.3, 6.4_
+
+- [x] 4. Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 5. Implement Profile Management
+  - [x] 5.1 Add profile management to ConfigManager
+    - Implement create_profile, update_profile, delete_profile methods
+    - Implement export_profile and import_profile methods
+    - Ensure profile creation creates corresponding mapping file
+    - _Requirements: 9.1, 9.2, 9.5, 9.6, 9.7, 9.8, 10.1_
+  - [x] 5.2 Write property test for profile creation with mapping file
+    - **Property 8: Profile Creation with Mapping File**
+    - **Validates: Requirements 10.1**
+  - [x] 5.3 Write property test for profile settings loading
+    - **Property 6: Profile Settings Loading**
+    - **Validates: Requirements 8.1, 8.2, 8.4, 9.4, 10.2**
+  - [x] 5.4 Write property test for profile settings saving
+    - **Property 7: Profile Settings Saving**
+    - **Validates: Requirements 9.5, 10.4**
+  - [x] 5.5 Write property test for export excludes credentials
+    - **Property 9: Export Excludes Sensitive Credentials**
+    - **Validates: Requirements 9.7**
+  - [x] 5.6 Write property test for export includes mappings
+    - **Property 10: Export Includes Mappings**
+    - **Validates: Requirements 10.5**
+
+- [x] 6. Integrate mapping with existing ingest command
+  - [x] 6.1 Update ingest module to use ConfigManager
+    - Modify `ingest.py` to accept `--mapping-config` and `--profile` parameters
+    - Add environment variable fallback for AIRGAP_MAPPING_CONFIG
+    - Use ConfigManager for mapping resolution
+    - _Requirements: 1.1, 1.2, 1.3, 1.5_
+  - [x] 6.2 Update ingest to record history
+    - Add history recording after successful/failed ingestion
+    - _Requirements: 6.1, 6.2_
+  - [x] 6.3 Write integration tests for ingest with mappings
+    - Test ingest with profile-based mappings
+    - Test history recording
+    - _Requirements: 1.5, 6.1_
+
+- [x] 7. Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 8. Create Pack UI static files
+  - [x] 8.1 Create Pack UI HTML template
+    - Create `src/airgap_git_relay/static/pack/index.html`
+    - Include form for repository URL, GitLab credentials, pack options
+    - Add profile selector dropdown
+    - _Requirements: 3.2, 3.6, 9.3_
+  - [x] 8.2 Create Pack UI CSS styles
+    - Create `src/airgap_git_relay/static/pack/styles.css`
+    - Style form elements, progress indicators, error displays
+    - _Requirements: 3.2_
+  - [x] 8.3 Create Pack UI JavaScript
+    - Create `src/airgap_git_relay/static/pack/app.js`
+    - Implement form submission, progress display, profile switching
+    - Handle save defaults functionality
+    - _Requirements: 3.3, 3.4, 3.5, 8.1, 8.3_
+
+- [x] 9. Implement Pack UI Server
+  - [x] 9.1 Create Pack UI FastAPI application
+    - Create `src/airgap_git_relay/pack_ui.py` with FastAPI app
+    - Implement static file serving
+    - Add API endpoints for profiles and settings
+    - _Requirements: 3.1, 8.1, 9.3, 9.4_
+  - [x] 9.2 Implement pack execution endpoint
+    - Add `/api/pack` endpoint with streaming progress
+    - Execute pack operation and return results
+    - _Requirements: 3.3, 3.4, 3.5_
+  - [x] 9.3 Register Pack UI entry point
+    - Add `airgap-pack-ui` entry point in pyproject.toml
+    - _Requirements: 3.1_
+  - [x] 9.4 Write property test for no external resources
+    - **Property 12: No External Resource Dependencies**
+    - **Validates: Requirements 7.2, 7.3**
+
+- [x] 10. Create Ingest UI static files
+  - [x] 10.1 Create Ingest UI HTML template
+    - Create `src/airgap_git_relay/static/ingest/index.html`
+    - Include bundle upload, drop folder selection, mappings section
+    - Add profile selector and history display
+    - _Requirements: 4.2, 5.1, 6.3, 9.3_
+  - [x] 10.2 Create Ingest UI CSS styles
+    - Create `src/airgap_git_relay/static/ingest/styles.css`
+    - Style all UI components
+    - _Requirements: 4.2_
+  - [x] 10.3 Create Ingest UI JavaScript
+    - Create `src/airgap_git_relay/static/ingest/app.js`
+    - Implement bundle upload, manifest display, mapping management
+    - Handle profile switching and history display
+    - _Requirements: 4.3, 4.4, 4.5, 5.2, 5.3, 5.4, 5.5, 6.3, 6.4_
+
+- [x] 11. Implement Ingest UI Server
+  - [x] 11.1 Create Ingest UI FastAPI application
+    - Create `src/airgap_git_relay/ingest_ui.py` with FastAPI app
+    - Implement static file serving
+    - Add API endpoints for profiles, mappings, history
+    - _Requirements: 4.1, 5.1, 6.3, 8.2, 9.3_
+  - [x] 11.2 Implement bundle handling endpoints
+    - Add `/api/bundles/upload` endpoint for file upload
+    - Add `/api/bundles/drop-folder` endpoint for listing
+    - Add `/api/bundles/{id}/manifest` endpoint
+    - _Requirements: 4.2, 4.3, 4.4_
+  - [x] 11.3 Implement ingest execution endpoint
+    - Add `/api/ingest` endpoint with streaming progress
+    - Execute ingest operation and record history
+    - _Requirements: 4.5, 4.6, 6.1_
+  - [x] 11.4 Implement mapping management endpoints
+    - Add CRUD endpoints for mappings
+    - _Requirements: 5.1, 5.2, 5.3, 5.4_
+  - [x] 11.5 Implement profile management endpoints
+    - Add CRUD endpoints for profiles
+    - Add export/import endpoints
+    - _Requirements: 9.1, 9.5, 9.6, 9.7, 9.8, 10.3_
+  - [x] 11.6 Register Ingest UI entry point
+    - Add `airgap-ingest-ui` entry point in pyproject.toml
+    - _Requirements: 4.1_
+
+- [x] 12. Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 13. Update documentation
+  - [x] 13.1 Update README with new features
+    - Document mapping CLI usage
+    - Document Pack UI and Ingest UI usage
+    - Document profile management
+    - _Requirements: All_
+  - [x] 13.2 Update ARCHITECTURE.md
+    - Add diagrams for new components
+    - Document configuration file formats
+    - _Requirements: All_
+
+- [x] 14. Final Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.

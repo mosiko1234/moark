@@ -1,0 +1,4 @@
+# file: /Users/mosheeliya/dev/downloader/airgap-git-relay/src/airgap_git_relay/__init__.py
+# hypothesis_version: 6.148.7
+
+['ingest', 'pack']

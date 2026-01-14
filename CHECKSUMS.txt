@@ -1,0 +1,2 @@
+7f4d34c45f93ceeba7985e76e77333b2a2a1c88ebd5790e9878bae96d7d72bc9  moark-ingest-offline-bundle.tar.gz
+f0c0a360280eae815ca651c0af1510a62267abd66d051ba066bdfff41211d238  moark-pack-offline-bundle.tar.gz

@@ -1,0 +1,4 @@
+# file: /Users/mosheeliya/dev/downloader/airgap-git-relay/src/airgap_git_relay/utils.py
+# hypothesis_version: 6.148.7
+
+['%Y%m%dT%H%M%SZ', '--version', '.git', '.gitmodules', '/', '[^A-Za-z0-9._-]', '_', 'airgap-git-relay-', 'git', 'path', 'url', 'w:gz']

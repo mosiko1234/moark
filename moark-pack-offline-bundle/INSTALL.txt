@@ -1,0 +1,195 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    Moses in the Ark - Pack Package                         ║
+║                     Offline Installation Bundle                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+📦 PACKAGE CONTENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+This bundle contains:
+  • moark-pack/          - Main package source code
+  • wheels/              - All Python dependencies (21 packages)
+  • INSTALL.txt          - This file
+
+🔧 SYSTEM REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  • Python 3.10 or higher
+  • pip
+  • Git (for repository operations)
+  • macOS, Linux, or Windows
+  • Internet connection (for accessing external GitLab/GitHub)
+
+📥 INSTALLATION STEPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Extract this bundle (if compressed):
+   
+   tar -xzf moark-pack-offline-bundle.tar.gz
+   cd moark-pack-offline-bundle
+
+
+2. Install all dependencies from wheels:
+   
+   pip install --no-index --find-links=wheels -r moark-pack/requirements.txt
+   
+   Or install all wheels at once:
+   
+   pip install --no-index --find-links=wheels wheels/*.whl
+
+
+3. Install moark-pack package:
+   
+   cd moark-pack
+   pip install -e ".[ui]"
+
+
+4. Verify installation:
+   
+   moark-pack --help
+   moark-pack-ui --help
+
+✅ VERIFY COMMANDS AVAILABLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+After installation, you should have these commands:
+
+  • moark-pack           - Main CLI for packing repositories
+  • moark-pack-ui        - Terminal UI (TUI) for packing repositories
+
+🚀 QUICK START
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Option 1: Using the Terminal UI (Recommended)
+──────────────────────────────────────────────
+   moark-pack-ui
+
+
+Option 2: Using the CLI
+──────────────────────────────────────────────
+   # Pack a private GitLab repository
+   moark-pack \
+     --source-gitlab-url https://gitlab.company.local \
+     --repo-path group/project \
+     --source-username developer \
+     --source-password "password123" \
+     --output ./bundles \
+     --insecure
+
+   # Pack from a full repository URL
+   moark-pack \
+     --source-gitlab-url https://kh-gitlab.kayhut.local \
+     --repo-path root/moshe-test \
+     --source-username root \
+     --source-password "1q2w3e4R!" \
+     --output ./dist \
+     --insecure
+
+   # Pack a public repository
+   moark-pack \
+     --repo-url https://github.com/user/repo.git \
+     --output ./bundles
+
+📋 USING THE TUI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Launch the UI:
+   
+   moark-pack-ui
+
+
+2. Fill in the form:
+   
+   • Repository URL: Full Git URL (e.g., https://gitlab.com/group/project.git)
+   • Username: Your GitLab/GitHub username
+   • Password: Your password or Personal Access Token
+   • Output Directory: Where to save the bundle (default: ./dist)
+   • ☑ Disable SSL Verification: For .local domains or self-signed certificates
+
+
+3. Click "Pack" to create the bundle
+
+
+4. The bundle will be created as: {repo-name}-{timestamp}.tar.gz
+
+⚙️ ADVANCED OPTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Include Submodules:
+   moark-pack --source-gitlab-url ... --repo-path ... --with-submodules
+
+Download CI/CD Artifacts:
+   moark-pack --source-gitlab-url ... --repo-path ... --with-artifacts --artifacts-ref main
+
+Custom Repository Name:
+   moark-pack --source-gitlab-url ... --repo-path ... --repo-name custom-name
+
+🔐 AUTHENTICATION NOTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For Private GitLab Instances:
+  • Some GitLab instances require Personal Access Tokens instead of passwords
+  • Create a token at: Settings → Access Tokens
+  • Required scopes: read_repository, read_api (if downloading artifacts)
+  • Use the token as the password
+
+For Public Repositories:
+  • No authentication needed
+  • Use --repo-url instead of --source-gitlab-url and --repo-path
+
+For Self-Signed Certificates:
+  • Use --insecure flag to disable SSL verification
+  • Or check "Disable SSL Verification" in the UI
+
+📚 DOCUMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Full documentation available in:
+
+  • moark-pack/README.md          - Quick start and CLI reference
+  • moark-pack/DOCUMENTATION.md    - Comprehensive guide (if available)
+
+📦 BUNDLE OUTPUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The pack command creates a .tar.gz bundle containing:
+
+  • {repo-name}.git/     - Git bundle (mirror clone)
+  • manifest.json        - Metadata about the bundle
+  • artifacts/           - CI/CD artifacts (if --with-artifacts was used)
+  • submodules/          - Submodule bundles (if --with-submodules was used)
+
+This bundle can be transferred to the air-gapped network using:
+  • USB drive / disk-on-key
+  • Physical media transfer
+  • Any approved data transfer method
+
+🆘 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Problem: "command not found: moark-pack"
+Solution: Make sure pip's bin directory is in your PATH.
+          Try: python3 -m moark_pack.pack --help
+
+Problem: "SSL certificate verification failed"
+Solution: Use --insecure flag or check "Disable SSL Verification" in UI.
+
+Problem: "HTTP Basic: Access denied"
+Solution: Your GitLab instance might require a Personal Access Token.
+          Create one at: GitLab Settings → Access Tokens
+          Use the token as the password instead of your regular password.
+
+Problem: "Got unexpected extra argument"
+Solution: Make sure you're running the command in a single line.
+          Avoid using backslashes (\) for line continuation in xonsh shell.
+          Instead, run the entire command on one line.
+
+Problem: UI doesn't start
+Solution: Make sure textual is installed: pip install textual>=0.40.0
+
+📧 SUPPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+For support or questions, contact: Moshe Eliya
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Version: 0.1.0
+Package: moark-pack (Moses in the Ark - Pack)
+Network: Internet-Connected (External)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+

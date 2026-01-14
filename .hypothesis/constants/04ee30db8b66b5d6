@@ -1,0 +1,4 @@
+# file: /Users/mosheeliya/dev/downloader/airgap-git-relay/src/airgap_git_relay/ingest.py
+# hypothesis_version: 6.148.7
+
+['*.tar.gz', '--drop-dir', '--git-dir', '--mapping', '--mirror', '--password', '--remote-template', '--tar', '--username', 'JSON mapping file', '__main__', 'add', 'airgap-ingest-', 'artifacts', 'ingest', 'ingest-dir', 'manifest.json', 'mirror', 'push', 'r:gz', 'remote', 'remove', 'repo_name', 'repo_url', 'submodules', 'target', 'url', 'with_submodules']

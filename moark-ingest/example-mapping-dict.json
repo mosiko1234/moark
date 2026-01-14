@@ -1,0 +1,36 @@
+{
+  "_description": "Repository name mapping dictionary - Maps external (Internet) names to internal (airgap) names",
+  "_version": "1.0",
+  "_last_updated": "2024-01-15T10:00:00Z",
+  "mappings": {
+    "yossi": {
+      "internal_repo": "project-alpha",
+      "internal_url": "https://git.internal.company/security/project-alpha.git",
+      "description": "Security project - classified",
+      "team": "security-team",
+      "classification": "secret"
+    },
+    "david-app": {
+      "internal_repo": "customer-portal",
+      "internal_url": "https://git.internal.company/products/customer-portal.git",
+      "description": "Customer-facing portal application",
+      "team": "product-team",
+      "classification": "internal"
+    },
+    "mobile-client": {
+      "internal_repo": "defense-mobile-app",
+      "internal_url": "https://git.internal.company/mobile/defense-app.git",
+      "description": "Mobile application for defense systems",
+      "team": "mobile-team",
+      "classification": "top-secret"
+    },
+    "backend-service": {
+      "internal_repo": "core-backend-system",
+      "internal_url": "https://git.internal.company/backend/core-system.git",
+      "description": "Core backend infrastructure",
+      "team": "backend-team",
+      "classification": "confidential"
+    }
+  }
+}
+

@@ -1,0 +1,188 @@
+# Implementation Plan
+
+- [ ] 1. Create Target GitLab Client module
+  - [ ] 1.1 Create `target_gitlab_client.py` with TargetGitLabConfig and TargetGitLabClient classes
+    - Implement `__init__` with config validation
+    - Implement `_make_request` helper with authentication header
+    - _Requirements: 1.1, 1.2_
+  - [ ] 1.2 Write property test for API authentication header
+    - **Property 1: API Authentication Header**
+    - **Validates: Requirements 1.2**
+  - [ ] 1.3 Implement `project_exists` and `get_project` methods
+    - Query GitLab Projects API by path_with_namespace
+    - Return ProjectInfo dataclass or None
+    - _Requirements: 2.1_
+  - [ ] 1.4 Implement `create_project` method
+    - POST to GitLab Projects API with name, namespace_id, visibility
+    - Return ProjectInfo dataclass
+    - _Requirements: 2.1, 2.2, 2.3, 2.5_
+  - [ ] 1.5 Implement `get_namespace_id` method
+    - Query GitLab Namespaces API by path
+    - Return namespace ID or None
+    - _Requirements: 2.3_
+  - [ ] 1.6 Implement `upload_package_file` method
+    - PUT to GitLab Generic Packages API
+    - Return PackageInfo dataclass with download URL
+    - _Requirements: 5.1, 5.2_
+  - [ ] 1.7 Implement `build_clone_url_with_token` method
+    - Build URL in format https://oauth2:{token}@{host}/{path}.git
+    - _Requirements: 1.4_
+  - [ ] 1.8 Write unit tests for TargetGitLabClient
+    - Test project_exists, get_project, create_project
+    - Test get_namespace_id, upload_package_file
+    - Mock HTTP responses
+    - _Requirements: 1.1-1.5, 2.1-2.7_
+
+- [ ] 2. Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 3. Implement path parsing utilities
+  - [ ] 3.1 Create path parsing functions in `utils.py`
+    - Implement `parse_project_path(path) -> (namespace, project_name)`
+    - Handle paths with and without namespace
+    - _Requirements: 3.1, 3.2_
+  - [ ] 3.2 Write property test for path parsing
+    - **Property 6: Path Parsing**
+    - **Validates: Requirements 3.2**
+  - [ ] 3.3 Write property test for target path override
+    - **Property 5: Target Path Override**
+    - **Validates: Requirements 3.1**
+
+- [ ] 4. Implement Project Manager
+  - [ ] 4.1 Create `project_manager.py` with ProjectManager class
+    - Implement `__init__` with TargetGitLabClient and dry_run flag
+    - _Requirements: 7.4_
+  - [ ] 4.2 Implement `ensure_project_exists` method
+    - Check if project exists, create if not
+    - Return (ProjectInfo, was_created) tuple
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
+  - [ ] 4.3 Write property test for project creation when missing
+    - **Property 2: Project Creation When Missing**
+    - **Validates: Requirements 2.1, 2.2**
+  - [ ] 4.4 Write property test for existing project no recreation
+    - **Property 15: Existing Project No Recreation**
+    - **Validates: Requirements 6.1**
+  - [ ] 4.5 Implement `push_mirror` method
+    - Add remote, push with --mirror flag
+    - Handle force/no-force based on parameter
+    - Return (refs_count, commits_count)
+    - _Requirements: 1.4, 6.1, 6.2, 6.3_
+  - [ ] 4.6 Write property test for force push default
+    - **Property 16: Force Push Default**
+    - **Validates: Requirements 6.2**
+  - [ ] 4.7 Write property test for no force flag behavior
+    - **Property 17: No Force Flag Behavior**
+    - **Validates: Requirements 6.3**
+
+- [ ] 5. Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 6. Implement Artifact Uploader
+  - [ ] 6.1 Create `artifact_uploader.py` with ArtifactUploader class
+    - Implement `__init__` with TargetGitLabClient and dry_run flag
+    - _Requirements: 5.1_
+  - [ ] 6.2 Implement `upload_artifacts` method
+    - Iterate over artifacts in manifest
+    - Upload each using client.upload_package_file
+    - Use job_name as package_name, pipeline_id as version
+    - Continue on individual failures
+    - _Requirements: 5.1, 5.2, 5.5_
+  - [ ] 6.3 Write property test for artifact upload completeness
+    - **Property 10: Artifact Upload Completeness**
+    - **Validates: Requirements 5.1**
+  - [ ] 6.4 Write property test for artifact package naming
+    - **Property 11: Artifact Package Naming**
+    - **Validates: Requirements 5.2**
+  - [ ] 6.5 Write property test for artifact upload resilience
+    - **Property 12: Artifact Upload Resilience**
+    - **Validates: Requirements 5.5**
+  - [ ] 6.6 Implement `extract_artifacts` method (enhance existing)
+    - Copy files preserving directory structure
+    - Return (file_count, total_bytes)
+    - _Requirements: 5b.1, 5b.2, 5b.3_
+  - [ ] 6.7 Write property test for artifact extraction structure preservation
+    - **Property 13: Artifact Extraction Structure Preservation**
+    - **Validates: Requirements 5b.2**
+  - [ ] 6.8 Write property test for artifact extraction statistics
+    - **Property 14: Artifact Extraction Statistics**
+    - **Validates: Requirements 5b.3**
+
+- [ ] 7. Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 8. Implement Submodule Handler
+  - [ ] 8.1 Add submodule handling logic to ingest
+    - Load submodule mapping file if provided
+    - Process each submodule as separate project
+    - Use same namespace as main project
+    - _Requirements: 4.1, 4.2, 4.3_
+  - [ ] 8.2 Write property test for submodule project creation
+    - **Property 7: Submodule Project Creation**
+    - **Validates: Requirements 4.1**
+  - [ ] 8.3 Write property test for submodule namespace consistency
+    - **Property 8: Submodule Namespace Consistency**
+    - **Validates: Requirements 4.2**
+  - [ ] 8.4 Write property test for submodule mapping application
+    - **Property 9: Submodule Mapping Application**
+    - **Validates: Requirements 4.3**
+
+- [ ] 9. Extend Ingest Command with new parameters
+  - [ ] 9.1 Add new CLI parameters to `ingest.py`
+    - Add --target-gitlab-url, --target-token (with envvar fallback)
+    - Add --target-namespace, --target-project-path, --visibility
+    - Add --skip-artifacts, --submodule-mapping
+    - Add --no-force, --dry-run
+    - _Requirements: 1.1, 1.2, 1.3, 2.3, 2.5, 3.1, 5.4, 6.3, 7.4_
+  - [ ] 9.2 Implement main ingest flow with GitLab target
+    - Extract bundle, read manifest
+    - Ensure project exists (create if needed)
+    - Push mirror to GitLab
+    - Upload artifacts (unless skipped)
+    - Process submodules
+    - Generate summary report
+    - _Requirements: 1.4, 1.5, 7.1, 7.2, 7.5_
+  - [ ] 9.3 Write property test for namespace resolution
+    - **Property 3: Namespace Resolution**
+    - **Validates: Requirements 2.3**
+  - [ ] 9.4 Write property test for visibility parameter propagation
+    - **Property 4: Visibility Parameter Propagation**
+    - **Validates: Requirements 2.5**
+
+- [ ] 10. Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 11. Implement Batch Processing
+  - [ ] 11.1 Enhance `ingest-dir` command for GitLab target
+    - Process all tar.gz files in directory
+    - Continue on individual failures
+    - Generate summary with success/failure counts
+    - _Requirements: 8.1, 8.2, 8.3_
+  - [ ] 11.2 Write property test for batch processing completeness
+    - **Property 18: Batch Processing Completeness**
+    - **Validates: Requirements 8.1**
+  - [ ] 11.3 Write property test for batch processing resilience
+    - **Property 19: Batch Processing Resilience**
+    - **Validates: Requirements 8.2**
+  - [ ] 11.4 Implement parallel processing with --parallel flag
+    - Use concurrent.futures.ThreadPoolExecutor
+    - Respect parallel limit
+    - _Requirements: 8.4_
+  - [ ] 11.5 Write property test for parallel processing limit
+    - **Property 20: Parallel Processing Limit**
+    - **Validates: Requirements 8.4**
+
+- [ ] 12. Final Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 13. Update Documentation
+  - [ ] 13.1 Update README.md with new ingest parameters
+    - Document --target-gitlab-url, --target-token
+    - Document --target-namespace, --target-project-path, --visibility
+    - Document --skip-artifacts, --submodule-mapping
+    - Document --no-force, --dry-run, --parallel
+    - _Requirements: 4 (Documentation)_
+  - [ ] 13.2 Add complete usage example for air-gap workflow
+    - Show pack command on external network
+    - Show ingest command on air-gapped network
+    - Include artifact handling example
+    - _Requirements: 4 (Documentation)_

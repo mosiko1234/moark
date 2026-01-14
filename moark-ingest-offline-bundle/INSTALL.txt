@@ -1,0 +1,155 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                   Moses in the Ark - Ingest Package                        ║
+║                     Offline Installation Bundle                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+📦 PACKAGE CONTENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+This bundle contains:
+  • moark-ingest/        - Main package source code
+  • wheels/              - All Python dependencies (20 packages)
+  • INSTALL.txt          - This file
+
+🔧 SYSTEM REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  • Python 3.10 or higher
+  • pip
+  • Git (for repository operations)
+  • macOS, Linux, or Windows
+
+📥 INSTALLATION STEPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Extract this bundle (if compressed):
+   
+   tar -xzf moark-ingest-offline-bundle.tar.gz
+   cd moark-ingest-offline-bundle
+
+
+2. Install all dependencies from wheels:
+   
+   pip install --no-index --find-links=wheels -r moark-ingest/requirements.txt
+   
+   Or install all wheels at once:
+   
+   pip install --no-index --find-links=wheels wheels/*.whl
+
+
+3. Install moark-ingest package:
+   
+   cd moark-ingest
+   pip install -e ".[ui]"
+
+
+4. Verify installation:
+   
+   moark-ingest --help
+   moark-ingest-ui --help
+   moark-mapping --help
+
+✅ VERIFY COMMANDS AVAILABLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+After installation, you should have these commands:
+
+  • moark-ingest         - Main CLI for ingesting bundles
+  • moark-ingest-ui      - Terminal UI (TUI) for ingesting bundles
+  • moark-mapping        - CLI for managing repository mappings
+
+🚀 QUICK START
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Option 1: Using the Terminal UI (Recommended)
+──────────────────────────────────────────────
+   moark-ingest-ui
+
+
+Option 2: Using the CLI
+──────────────────────────────────────────────
+   # Ingest a single bundle
+   moark-ingest ingest \
+     --tar /path/to/bundle.tar.gz \
+     --remote-template "https://{username}:{password}@git.internal/{repo}.git" \
+     --username alice \
+     --password secret
+
+   # Ingest all bundles from a directory
+   moark-ingest ingest-dir \
+     --drop-folder /Volumes/USB \
+     --remote-template "https://{username}:{password}@git.internal/{repo}.git" \
+     --username alice \
+     --password secret
+
+📋 FIRST-TIME CONFIGURATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Launch the UI:
+   
+   moark-ingest-ui
+
+
+2. Configure S3 settings (for mapping dictionary):
+   
+   • S3 Endpoint URL: https://s3.internal.company
+   • S3 Bucket Name: airgap-mappings
+   • S3 Access Key: (optional)
+   • S3 Secret Key: (optional)
+   • Click "💾 Save & Download Mapping"
+
+
+3. The mapping dictionary will be saved to:
+   
+   ~/.moark/s3_settings.json
+   ~/.moark/mapping_dict.json
+
+📚 DOCUMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Full documentation available in:
+
+  • moark-ingest/README.md          - Quick start and CLI reference
+  • moark-ingest/DOCUMENTATION.md    - Comprehensive guide
+  • moark-ingest/USAGE_GUIDE.md      - Step-by-step usage guide
+  • moark-ingest/example-mapping-dict.json - Mapping dictionary example
+
+🔍 EXAMPLE MAPPING DICTIONARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The mapping dictionary maps external repository names to internal ones.
+See moark-ingest/example-mapping-dict.json for the structure.
+
+Example:
+{
+  "version": "1.0",
+  "mappings": {
+    "external-repo-name": {
+      "internal_repo": "classified-project-alpha",
+      "internal_url": "https://git.internal/classified-project-alpha.git",
+      "description": "External project mapped to internal classified project"
+    }
+  }
+}
+
+🆘 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Problem: "command not found: moark-ingest"
+Solution: Make sure pip's bin directory is in your PATH.
+          Try: python3 -m moark_ingest.ingest --help
+
+Problem: "No mapping found for repository"
+Solution: Download the latest mapping dictionary from S3 using the UI.
+
+Problem: SSL certificate verification failed
+Solution: Check "Disable SSL Verification" in S3 settings for .local domains.
+
+Problem: Git authentication failed
+Solution: Verify your username and password are correct for the internal Git.
+
+📧 SUPPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+For support or questions, contact: Moshe Eliya
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Version: 0.1.0
+Package: moark-ingest (Moses in the Ark - Ingest)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+

@@ -1,0 +1,4 @@
+# file: /Users/mosheeliya/dev/downloader/airgap-git-relay/src/airgap_git_relay/pack.py
+# hypothesis_version: 6.148.7
+
+['--artifacts-ref', '--depth', '--mirror', '--output', '--recursive', '--repo-name', '--repo-path', '--repo-url', '--source-gitlab-url', '--source-token', '--source-username', '--with-artifacts', '--with-submodules', '-o', './dist', '1', 'GitLabClient', 'Output directory', 'SOURCE_GITLAB_TOKEN', '__main__', 'artifacts', 'artifacts.zip', 'bundle', 'clone', 'created_at', 'file_name', 'file_size', 'git_version', 'id', 'job_id', 'job_name', 'manifest.json', 'mirror', 'name', 'pack', 'path', 'pipeline_id', 'ref', 'repo_name', 'repo_path', 'repo_url', 'source_gitlab_url', 'submodules', 'unknown', 'url', 'with_artifacts', 'with_submodules', 'worktree']
